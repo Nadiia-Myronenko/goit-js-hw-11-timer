@@ -13,15 +13,19 @@ class CountdownTimer {
         this.onTick = onTick;
     }
     start(){
-        const targetDate = new Date('October 27, 2021');//здесь задаем конечную дату
-        setInterval(() => {
+        const targetDate = this.targetDate;
+        const timerId = setInterval(() => {
             const currentTime = Date.now();
-            const deltaTime = this.targetDate - currentTime;
+            const deltaTime = targetDate - currentTime;
+            if (deltaTime <= 0) {
+                clearInterval(timerId);
+            };
+            
             const time = this.getTimeComponents(deltaTime);
-            this.onTick(time)
-        }, 1000)
-        
-    }
+            this.onTick(time);
+            
+        }, 1000);
+          }
 
     getTimeComponents(time) {
     const days = Math.floor(time / (1000 * 60 * 60 * 24));
@@ -41,7 +45,7 @@ class CountdownTimer {
 
 const countdownTimer = new CountdownTimer({
     selector: '#timer-1',
-    targetDate: new Date('Nov 27, 2021'),
+    targetDate: new Date('Nov 24, 2021'),
     onTick: updateClockface
 });
 
